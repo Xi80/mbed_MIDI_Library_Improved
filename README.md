@@ -16,8 +16,7 @@ This library uses a Serial Receive Interrupt.
 #include <mbed.h>
 #include "midi/midi.h"
 
-Serial pc(USBTX,USBRX,38400);
-MIDI midi(pc,38400);
+MIDI midi(USBTX,USBRX,38400);
 DigitalOut led(LED1);
 
 void noteOn(uint8_t channel,uint8_t note,uint8_t velocity){

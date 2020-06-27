@@ -1,6 +1,10 @@
 #include "midi.h"
 
-MIDI::MIDI(Serial uart,uint16_t baud = 31250) :_serial(uart){
+#if DEBUG_MODE == true
+    DigitalOut led(LED1);
+#endif
+
+MIDI::MIDI(PinName tx,PinName rx,uint16_t baud) :_serial(tx,rx){
     _serial.baud(baud);
 
     callbackFunctionNoteOff                 = NULL;
@@ -17,7 +21,7 @@ MIDI::MIDI(Serial uart,uint16_t baud = 31250) :_serial(uart){
     callbackFunctionAllNotesOff             = NULL;
 
     callbackFunctionSystemExclusive         = NULL;
-
+    callbackFunctionReset                   = NULL;
     resetStatus();
     _serial.attach(this,&MIDI::receiveMessage,Serial::RxIrq);
 }
@@ -232,8 +236,11 @@ void MIDI::sendSystemExclusive(uint8_t *data,uint8_t length){
 }
 
 void MIDI::receiveMessage(void){
+    #if DEBUG_MODE == true
+        led = !led;
+    #endif
     uint8_t data = _serial.getc();
-    if(messageBuffer.size() > receiveMessageBufferSize)messageBuffer.clear();
+    if(messageBuffer.size() > receiveMessageBufferSize - 1)messageBuffer.clear();
     messageBuffer.push_back(data);
     return;
 }

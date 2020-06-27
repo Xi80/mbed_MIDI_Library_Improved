@@ -3,6 +3,8 @@
 #include <mbed.h>
 #include "CircularBuffer.h"
 
+#define DEBUG_MODE true
+
 const static int receiveMessageBufferSize = 1024;
 
 const static int systemExclusiveBufferSize = 128;
@@ -15,7 +17,7 @@ const  static uint8_t gsReset[]    = {0x41,0x10,0x42,0x12,0x40,0x00,0x7F,0x00,0x
 
 class MIDI{
   public:
-    MIDI(Serial uart,uint16_t baud = 31250);
+    MIDI(PinName,PinName,uint16_t);
     //receive Functions
 
     void resetStatus(void);
@@ -56,8 +58,8 @@ class MIDI{
     void sendSystemExclusive(uint8_t*,uint8_t);
 
   private:
-    Serial _serial;
 
+    Serial _serial;
     lunaLib::CircularBuffer<uint8_t,receiveMessageBufferSize> messageBuffer;
 
     uint8_t systemExclusiveBuffer[systemExclusiveBufferSize];
