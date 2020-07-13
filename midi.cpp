@@ -282,7 +282,7 @@ void MIDI::decodeMessage(void){
             if(callbackFunctionChannelPressure != NULL)callbackFunctionChannelPressure(runningStatusChannel,data[1]);
             break;
         case pitchWheelChange:
-            uint8_t bend = (data[3] << 7) & data[2];
+            uint8_t bend = (data[3] << 7) | data[2];
             if(callbackFunctionPitchWheelChange != NULL)callbackFunctionPitchWheelChange(runningStatusChannel,bend);
             break;
     }
